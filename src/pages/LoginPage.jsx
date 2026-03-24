@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 
-const VALID_CREDENTIALS = { email: 'admin@example.com', password: 'password123' };
+const VALID_CREDENTIALS = [
+  { identifier: 'admin@example.com', password: 'password123' },
+  { identifier: 'admin716', password: 'password123' },
+];
 
 function LoginPage({ onLogin }) {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (
-      email === VALID_CREDENTIALS.email &&
-      password === VALID_CREDENTIALS.password
-    ) {
+    const match = VALID_CREDENTIALS.find(
+      (c) => c.identifier === identifier && c.password === password
+    );
+    if (match) {
       setError('');
       onLogin();
     } else {
-      setError('Invalid email or password. Please try again.');
+      setError('Invalid email/user ID or password. Please try again.');
     }
   };
 
@@ -30,16 +33,16 @@ function LoginPage({ onLogin }) {
 
         <form data-testid="login-form" onSubmit={handleSubmit}>
           <div style={styles.field}>
-            <label htmlFor="email" style={styles.label}>
-              Email
+            <label htmlFor="identifier" style={styles.label}>
+              Email / User ID
             </label>
             <input
-              id="email"
+              id="identifier"
               data-testid="input-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@example.com"
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="admin@example.com or admin716"
               required
               style={styles.input}
             />
@@ -78,7 +81,7 @@ function LoginPage({ onLogin }) {
         </form>
 
         <p style={styles.hint}>
-          Demo: <strong>admin@example.com</strong> / <strong>password123</strong>
+          Demo: <strong>admin@example.com</strong> or <strong>admin716</strong> / <strong>password123</strong>
         </p>
       </div>
     </div>
